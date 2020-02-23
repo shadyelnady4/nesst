@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule  } from '@nestjs/typeorm';
+import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PatientModule } from './patient/patient.module';
-import { GraphQLModule } from '@nestjs/graphql';
+import { SampleModule } from './Models/Sample/sample.module';
+import { DateScalar } from './Models/Utils/scalars';
+//import { CustomPKFactory } from './PKFactory'
+
 
 @Module({
   imports: [
@@ -18,18 +21,33 @@ import { GraphQLModule } from '@nestjs/graphql';
       //username: 'root',
       //password: 'root',
       database: 'nesst',
-      entities: [join(__dirname,`**/Entities/*{.ts,.js}`)],
+      entities: [join(__dirname,`Models/**/Entities/index.js`)],
       synchronize: true,
+      //dropSchema: true,
+      //forceServerObjectId: true,
+      ignoreUndefined : true,
+      appname: 'EL-Nady Lab',
+      logging: true,
+      logger: 'simple-console',
+      
+      //pkFactory: CustomPKFactory,
     }),
     GraphQLModule.forRoot({
       debug: false,
       playground: true,
+      //buildSchemaOptions:{scalarsMap: [
+        //{ type: ObjectId, scalar: MongoIdScalar },
+        //{ type: ObjectID, scalar: TypormIdScalar }
+      //]},
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
+      //include: [ SampleModule],              //serve multiple endpoints at once
     }),
-    PatientModule
+    SampleModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService, DateScalar //,IdScalar //, UploadScalar
+  ],
 })
 export class AppModule {}
