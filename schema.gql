@@ -3,6 +3,11 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
 input Input {
   name: String
   gender: String
@@ -33,4 +38,20 @@ type Result {
   count: Int
   meassage: String
   data: [Patient!]
+}
+
+type Sample {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  name: String
+  volume: Int
+}
+
+input SampleInput {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  name: String
+  volume: Int
 }
